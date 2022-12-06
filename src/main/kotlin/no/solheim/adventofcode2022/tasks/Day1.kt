@@ -7,6 +7,19 @@ import org.springframework.stereotype.Component
 @Component
 class Day1(@Value("classpath:/inputs/day_1.txt") val input: Resource) : DayTask {
     override fun run() {
-        println(input.file.readText())
+        val sums = calculateCalorySums()
+        val maxCalories = sums.max()
+        println(maxCalories)
+
+        val top3Sum = sums.sorted().reversed().subList(0, 3).sum()
+        println(top3Sum)
     }
+
+    fun calculateCalorySums() = this.input.file.readText()
+        .split("\n\n").map {
+            it.split("\n")
+                .filter(String::isNotBlank)
+                .map(String::toInt)
+                .sum()
+        }
 }
