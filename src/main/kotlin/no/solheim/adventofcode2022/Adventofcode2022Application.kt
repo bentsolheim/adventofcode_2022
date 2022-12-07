@@ -18,7 +18,7 @@ fun main(args: Array<String>) {
 class Startup(val tasks: List<DayTask>) : ApplicationRunner {
     override fun run(args: ApplicationArguments?) {
 
-        val dayToRun = 1
+        val dayToRun = 2
         tasks.map { (it::class.simpleName ?: "").replace("Day", "").toInt() to it }
             .first { (day, task) -> day == dayToRun }
             .second.run()
