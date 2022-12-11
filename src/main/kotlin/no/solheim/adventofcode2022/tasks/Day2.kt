@@ -6,12 +6,12 @@ import org.springframework.stereotype.Component
 import no.solheim.adventofcode2022.tasks.Day2.Companion.Move.P
 import no.solheim.adventofcode2022.tasks.Day2.Companion.Move.R
 import no.solheim.adventofcode2022.tasks.Day2.Companion.Move.S
+import nonBlankLines
 
 @Component
 class Day2(@Value("classpath:/inputs/day_2.txt") val input: Resource) : DayTask {
     override fun run() {
-        val input = String(this.input.inputStream.readAllBytes())
-        val codedMoves = input.split("\n")
+        val codedMoves = input.nonBlankLines()
             .map { it.split(" ").let { (him, code) -> him to code } }
 
         val sumFirstStrategy = codedMoves
