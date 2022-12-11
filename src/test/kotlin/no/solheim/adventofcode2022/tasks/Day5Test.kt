@@ -21,6 +21,7 @@ move 1 from 1 to 2
     fun example() {
         Day5(example.substring(example.indexOf('\n')+1)).apply {
             assertThat(crateCode).isEqualTo("CMZ")
+            assertThat(crateCode2).isEqualTo("MCD")
         }
     }
 
@@ -28,6 +29,7 @@ move 1 from 1 to 2
     fun input() {
         Day5(input).apply {
             println(crateCode)
+            println(crateCode2)
         }
     }
 }

@@ -14,11 +14,31 @@ class Day5(val input: String) {
         return columns.values.joinToString("") { it.last() }
     }
 
+    val crateCode2: String get() {
+
+        val (cratesTxt, movesTxt) = input.split("\n\n")
+
+        val columns = parseColumns(cratesTxt)
+        val moves = parseMoves(movesTxt)
+        moves.move2(columns)
+
+        return columns.values.joinToString("") { it.last() }
+    }
+
     private fun List<Move>.move(columns: MutableMap<Int, MutableList<String>>) {
         forEach {
-            for (i in 0..it.count-1) {
+            for (i in 0 until it.count) {
                 val c = columns[it.from]!!.removeLast()
                 columns[it.to]!!.add(c)
+            }
+        }
+    }
+
+    private fun List<Move>.move2(columns: MutableMap<Int, MutableList<String>>) {
+        forEach {
+            for (i in 0 until it.count) {
+                val c = columns[it.from]!!.removeLast()
+                columns[it.to]!!.add(columns[it.to]!!.size - i, c)
             }
         }
     }
