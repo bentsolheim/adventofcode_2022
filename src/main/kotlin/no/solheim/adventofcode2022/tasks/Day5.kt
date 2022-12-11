@@ -3,26 +3,29 @@ package no.solheim.adventofcode2022.tasks
 import nonBlankLines
 
 class Day5(val input: String) {
-    val crateCode: String get() {
 
+    val cratesTxt: String
+    val moves: List<Move>
+
+    init {
         val (cratesTxt, movesTxt) = input.split("\n\n")
-
+        this.cratesTxt = cratesTxt
+        moves = parseMoves(movesTxt)
+    }
+    val crateCode: String get() {
         val columns = parseColumns(cratesTxt)
-        val moves = parseMoves(movesTxt)
         moves.move(columns)
-
-        return columns.values.joinToString("") { it.last() }
+        return columns.generateCode()
     }
 
     val crateCode2: String get() {
-
-        val (cratesTxt, movesTxt) = input.split("\n\n")
-
         val columns = parseColumns(cratesTxt)
-        val moves = parseMoves(movesTxt)
         moves.move2(columns)
+        return columns.generateCode()
+    }
 
-        return columns.values.joinToString("") { it.last() }
+    private fun MutableMap<Int, MutableList<String>>.generateCode(): String {
+        return this.values.joinToString("") { it.last() }
     }
 
     private fun List<Move>.move(columns: MutableMap<Int, MutableList<String>>) {
