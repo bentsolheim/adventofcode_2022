@@ -1,36 +1,28 @@
 package no.solheim.adventofcode2022.tasks
 
-import org.springframework.beans.factory.annotation.Value
-import org.springframework.core.io.Resource
-import org.springframework.stereotype.Component
 import no.solheim.adventofcode2022.tasks.Day2.Companion.Move.P
 import no.solheim.adventofcode2022.tasks.Day2.Companion.Move.R
 import no.solheim.adventofcode2022.tasks.Day2.Companion.Move.S
 import nonBlankLines
 
-@Component
-class Day2(@Value("classpath:/inputs/day_2.txt") val input: Resource) : DayTask {
-    override fun run() {
-        val codedMoves = input.nonBlankLines()
-            .map { it.split(" ").let { (him, code) -> him to code } }
+class Day2(final val input: String) {
+    val codedMoves = input.nonBlankLines()
+        .map { it.split(" ").let { (him, code) -> him to code } }
 
-        val sumFirstStrategy = codedMoves
-            .map { (him, code) -> moves[him]!! to moves[code]!! }
-            .sumOf { (him, me) -> me.score(him) }
-        println(sumFirstStrategy)
+    val sumFirstStrategy = codedMoves
+        .map { (him, code) -> moves[him]!! to moves[code]!! }
+        .sumOf { (him, me) -> me.score(him) }
 
-        val sumSecondStrategy = codedMoves
-            .map { (him, code) -> moves[him]!! to code }
-            .sumOf { (him, code) ->
-                val me = when (code) {
-                    "X" -> him.beatMove
-                    "Y" -> him
-                    else -> him.looseMove
-                }
-                me.score(him)
+    val sumSecondStrategy = codedMoves
+        .map { (him, code) -> moves[him]!! to code }
+        .sumOf { (him, code) ->
+            val me = when (code) {
+                "X" -> him.beatMove
+                "Y" -> him
+                else -> him.looseMove
             }
-        println(sumSecondStrategy)
-    }
+            me.score(him)
+        }
 
     companion object {
         enum class Move {

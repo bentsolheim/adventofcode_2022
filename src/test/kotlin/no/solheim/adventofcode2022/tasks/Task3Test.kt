@@ -4,16 +4,28 @@ import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import org.springframework.core.io.ByteArrayResource
 
-class Task3Test {
+class Task3Test : AdventTest() {
 
-    @Test
-    fun a() {
-        val example = """vJrwpWtwJgWrhcsFMMfFFhFp
+    val example = """vJrwpWtwJgWrhcsFMMfFFhFp
 jqHRNqRjqzjGDLGLrsFMfFZSrLrFZsSL
 PmmdzqPrVvPwwTWBwg
 wMqvLMZHhHMvwLHjbvcjnnSBnvTQFn
 ttgJtRGJQctTZtZT
 CrZsJsPPZsGzwwsLwLmpwMDw"""
-        Day3(ByteArrayResource(example.toByteArray())).run()
+
+    @Test
+    fun example() {
+        Day3(example).apply {
+            assertThat(sum).isEqualTo(157)
+            assertThat(sum2).isEqualTo(70)
+        }
+    }
+
+    @Test
+    fun input() {
+        Day3(input).apply {
+            println(sum)
+            println(sum2)
+        }
     }
 }
