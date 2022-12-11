@@ -2,9 +2,8 @@ package no.solheim.adventofcode2022.tasks
 
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
-import org.springframework.core.io.ByteArrayResource
 
-class Task1Test : AdventTest() {
+class Day1Test : AdventTest() {
 
     val example = """1000
 2000

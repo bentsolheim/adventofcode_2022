@@ -3,7 +3,7 @@ package no.solheim.adventofcode2022.tasks
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
-class Task2Test : AdventTest() {
+class Day2Test : AdventTest() {
 
     val example = """A Y
 B X
