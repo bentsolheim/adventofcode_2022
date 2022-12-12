@@ -5,15 +5,28 @@ import org.junit.jupiter.api.Test
 
 class Day10Test : AdventTest() {
 
-    val example = this.javaClass.getResource("/inputs/day_9_ex.txt")?.readText() ?: ""
+    val example = this.javaClass.getResource("/inputs/day_10_ex.txt")?.readText() ?: ""
 
+    val expectedScreen = """
+##  ##  ##  ##  ##  ##  ##  ##  ##  ##  
+###   ###   ###   ###   ###   ###   ### 
+####    ####    ####    ####    ####    
+#####     #####     #####     #####     
+######      ######      ######      ####
+#######       #######       #######     """.trimStart()
     @Test
     fun example() {
-        assertThat(Day10(example).getSignalStrengthSampleSums()).isEqualTo(13140)
+        val day10 = Day10(example)
+        day10.runInstructions()
+        assertThat(day10.getSignalStrengthSampleSums()).isEqualTo(13140)
+        assertThat(day10.getScreen()).isEqualTo(expectedScreen)
     }
 
     @Test
     fun input() {
-        println(Day10(input).getSignalStrengthSampleSums())
+        val day10 = Day10(input)
+        day10.runInstructions()
+        println(day10.getSignalStrengthSampleSums())
+        println(day10.getScreen())
     }
 }

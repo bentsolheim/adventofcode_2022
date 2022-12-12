@@ -1,5 +1,7 @@
 package no.solheim.adventofcode2022.tasks
 
+import java.lang.Integer.max
+import java.lang.Integer.min
 import nonBlankLines
 
 class Day10(val input: String) {
@@ -9,7 +11,11 @@ class Day10(val input: String) {
 
     val signalStrengthSamples = mutableListOf<Int>()
 
-    fun getSignalStrengthSampleSums(): Int {
+    fun getSignalStrengthSampleSums(): Int = signalStrengthSamples.sum()
+
+    fun getScreen() = pixels.chunked(40).joinToString("\n") { it.joinToString("") }
+
+    fun runInstructions() {
         input.nonBlankLines().map { it.split(" ") }.forEach {
             val cmd = it[0]
             when (cmd) {
@@ -27,12 +33,11 @@ class Day10(val input: String) {
                 }
             }
         }
-
-        return signalStrengthSamples.sum()
     }
 
     fun cycleStart() {
         onCycleStart(cycle + 1, registry)
+        updateScreen(cycle + 1, registry)
     }
 
     fun cycleEnd() {
@@ -53,5 +58,19 @@ class Day10(val input: String) {
 
     fun sampleSignalStrength(cycle: Int, registry: Int) {
         signalStrengthSamples.add(cycle*registry)
+    }
+
+    val pixels = mutableListOf<String>()
+    fun updateScreen(cycle: Int, registry: Int) {
+        val spritePosition = (0..39).map { " " }.toMutableList().also {
+            if (registry in 1..39) it[registry-1] = "#"
+            if (registry in 0..39) it[registry] = "#"
+            if (registry >= -1 && registry <= 38) it[registry + 1] = "#"
+        }
+
+        val colIndex = (cycle-1) % 40
+        val pixel = spritePosition[colIndex]
+        // println("%3s %2s %2s  ".format(cycle, registry, colIndex) + spritePosition.joinToString(""))
+        pixels.add(pixel)
     }
 }
