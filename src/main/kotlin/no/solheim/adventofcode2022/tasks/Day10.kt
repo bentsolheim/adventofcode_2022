@@ -4,49 +4,39 @@ import nonBlankLines
 
 class Day10(val input: String) {
 
-    var registry = 1
-    var cycle = 0
+    private var registry = 1
+    private var cycle = 0
 
-    val signalStrengthSamples = mutableListOf<Int>()
-    val pixels = mutableListOf<String>()
+    private val signalStrengthSamples = mutableListOf<Int>()
+    private val pixels = mutableListOf<String>()
 
     fun getSignalStrengthSampleSums() = signalStrengthSamples.sum()
 
-    fun getScreen() = pixels.chunked(Companion.screenWidth).joinToString("\n") { it.joinToString("") }
+    fun getScreen() = pixels.chunked(screenWidth).joinToString("\n") { it.joinToString("") }
 
     fun runInstructions() {
         input.nonBlankLines().map { it.split(" ") }.forEach {
-            val cmd = it[0]
-            when (cmd) {
-                "noop" -> {
-                    cycleStart()
-                    cycleEnd()
-                }
-
+            when (it[0]) {
+                "noop" -> cycle()
                 "addx" -> {
-                    cycleStart()
-                    cycleEnd()
-                    cycleStart()
+                    cycle(2)
                     registry += it[1].toInt()
-                    cycleEnd()
                 }
             }
         }
     }
 
-    fun cycleStart() {
-        val startedCycle = cycle + 1
-        if (startedCycle in listOf(20, 60, 100, 140, 180, 220)) {
-            signalStrengthSamples.add(startedCycle * registry)
+    private fun cycle(count: Int = 1) {
+        repeat(count) {
+            cycle++
+            if (cycle in listOf(20, 60, 100, 140, 180, 220)) {
+                signalStrengthSamples.add(cycle * registry)
+            }
+            updateScreen(cycle, registry)
         }
-        updateScreen(startedCycle, registry)
     }
 
-    fun cycleEnd() {
-        cycle++
-    }
-
-    fun updateScreen(cycle: Int, registry: Int) {
+    private fun updateScreen(cycle: Int, registry: Int) {
         val colIndex = (cycle - 1) % screenWidth
         val pixel = if (colIndex in registry - 1..registry + 1) "#" else " "
         pixels.add(pixel)
