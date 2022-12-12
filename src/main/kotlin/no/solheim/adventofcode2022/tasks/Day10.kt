@@ -1,7 +1,5 @@
 package no.solheim.adventofcode2022.tasks
 
-import java.lang.Integer.max
-import java.lang.Integer.min
 import nonBlankLines
 
 class Day10(val input: String) {
@@ -10,10 +8,11 @@ class Day10(val input: String) {
     var cycle = 0
 
     val signalStrengthSamples = mutableListOf<Int>()
+    val pixels = mutableListOf<String>()
 
-    fun getSignalStrengthSampleSums(): Int = signalStrengthSamples.sum()
+    fun getSignalStrengthSampleSums() = signalStrengthSamples.sum()
 
-    fun getScreen() = pixels.chunked(40).joinToString("\n") { it.joinToString("") }
+    fun getScreen() = pixels.chunked(Companion.screenWidth).joinToString("\n") { it.joinToString("") }
 
     fun runInstructions() {
         input.nonBlankLines().map { it.split(" ") }.forEach {
@@ -36,41 +35,24 @@ class Day10(val input: String) {
     }
 
     fun cycleStart() {
-        onCycleStart(cycle + 1, registry)
-        updateScreen(cycle + 1, registry)
+        val startedCycle = cycle + 1
+        if (startedCycle in listOf(20, 60, 100, 140, 180, 220)) {
+            signalStrengthSamples.add(startedCycle * registry)
+        }
+        updateScreen(startedCycle, registry)
     }
 
     fun cycleEnd() {
         cycle++
     }
 
-    fun onCycleStart(cycle: Int, registry: Int) {
-        val sample: () -> Unit = { sampleSignalStrength(cycle, registry) }
-        when (cycle) {
-            20 -> sample()
-            60 -> sample()
-            100 -> sample()
-            140 -> sample()
-            180 -> sample()
-            220 -> sample()
-        }
-    }
-
-    fun sampleSignalStrength(cycle: Int, registry: Int) {
-        signalStrengthSamples.add(cycle*registry)
-    }
-
-    val pixels = mutableListOf<String>()
     fun updateScreen(cycle: Int, registry: Int) {
-        val spritePosition = (0..39).map { " " }.toMutableList().also {
-            if (registry in 1..39) it[registry-1] = "#"
-            if (registry in 0..39) it[registry] = "#"
-            if (registry >= -1 && registry <= 38) it[registry + 1] = "#"
-        }
-
-        val colIndex = (cycle-1) % 40
-        val pixel = spritePosition[colIndex]
-        // println("%3s %2s %2s  ".format(cycle, registry, colIndex) + spritePosition.joinToString(""))
+        val colIndex = (cycle - 1) % screenWidth
+        val pixel = if (colIndex in registry - 1..registry + 1) "#" else " "
         pixels.add(pixel)
+    }
+
+    companion object {
+        const val screenWidth = 40
     }
 }
