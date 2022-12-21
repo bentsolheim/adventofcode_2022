@@ -30,7 +30,8 @@ U 20
     @Test
     fun example() {
         // assertThat(Day9(example, 2).getTailTouchCount()).isEqualTo(13)
-        Day9(example2, 10).getTailTouchCount()
+        // Day9(example, 10).getTailTouchCount()
+        println(Day9(example2, 10).getTailTouchCount())
     }
 
     @Test
