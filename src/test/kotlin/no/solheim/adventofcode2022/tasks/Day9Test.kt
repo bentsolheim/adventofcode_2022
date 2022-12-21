@@ -18,10 +18,11 @@ R 2
 
     @Test
     fun example() {
-        Day9(example)
+        assertThat(Day9(example).getTailTouchCount()).isEqualTo(13)
     }
 
     @Test
     fun input() {
+        println(Day9(input).getTailTouchCount())
     }
 }
