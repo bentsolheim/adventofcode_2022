@@ -17,10 +17,10 @@ private fun Point.move(dir: String): Point {
     return this.run { x + dx to y + dy }
 }
 
-private fun Point.moveTowards(head: Point): Point {
-    val dx = head.x - x
+private fun Point.moveTowards(target: Point): Point {
+    val dx = target.x - x
     val dirX = if (dx != 0) dx / abs(dx) else 0
-    val dy = head.y - y
+    val dy = target.y - y
     val dirY = if (dy != 0) dy / abs(dy) else 0
     return if (abs(dx) == 2) Point(x + dirX, y + if (dy != 0) dirY else 0)
     else if (abs(dy) == 2) Point(x + if (dx != 0) dirX else 0, y + dirY)
