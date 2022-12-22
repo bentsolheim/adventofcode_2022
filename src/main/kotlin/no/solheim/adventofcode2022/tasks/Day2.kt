@@ -3,7 +3,6 @@ package no.solheim.adventofcode2022.tasks
 import no.solheim.adventofcode2022.tasks.Day2.Companion.Move.P
 import no.solheim.adventofcode2022.tasks.Day2.Companion.Move.R
 import no.solheim.adventofcode2022.tasks.Day2.Companion.Move.S
-import nonBlankLines
 
 class Day2(final val input: String) {
     val codedMoves = input.nonBlankLines()

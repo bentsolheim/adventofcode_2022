@@ -1,91 +1,105 @@
 package no.solheim.adventofcode2022.tasks
 
 import kotlin.math.abs
-import kotlin.math.max
-import nonBlankLines
 
 typealias Point = Pair<Int, Int>
 
 val Point.x: Int get() = this.first
 val Point.y: Int get() = this.second
 
-class Day9(val input: String, val partCount: Int = 2) {
+private fun Point.move(dir: String): Point {
+    val (dx, dy) = when (dir) {
+        "R" -> 1 to 0
+        "U" -> 0 to 1
+        "D" -> 0 to -1
+        else -> -1 to 0
+    }
+    return this.run { x + dx to y + dy }
+}
 
-    // var head = 0 to 0
-    var parts = (0..partCount - 1).map { Point(0, 0) }.toMutableList()
+private fun Point.moveTowards(head: Point): Point {
+    val dx = head.x - x
+    val dirX = if (dx != 0) dx / abs(dx) else 0
+    val dy = head.y - y
+    val dirY = if (dy != 0) dy / abs(dy) else 0
+    return if (abs(dx) == 2) Point(x + dirX, y + if (dy != 0) dirY else 0)
+    else if (abs(dy) == 2) Point(x + if (dx != 0) dirX else 0, y + dirY)
+    else this
+}
 
-    // var tail = 0 to 0
-    val tailTouches = mutableSetOf<Point>()
+class Day9(val input: String, partCount: Int = 2) {
+
+    private var parts = (0 until partCount).map { Point(0, 0) }.toMutableList()
+
+    private val tailTouches = mutableSetOf<Point>()
 
     fun getTailTouchCount(): Int {
         val moves = input.nonBlankLines().map { it.split(" ") }.map { it[0] to it[1].toInt() }
-        var move = 0
-        moves.forEach { (dir, count) ->
-            repeat(count) {
-                val (hdxi, hdyi) = when (dir) {
-                    "R" -> 1 to 0
-                    "U" -> 0 to 1
-                    "D" -> 0 to -1
-                    else -> -1 to 0
-                }
-                parts[0] = parts[0].run { x + hdxi to y + hdyi }
+        moves.forEachIndexed { move, (dir, count) ->
+            repeat(count) { rep ->
+                // Move head
+                parts[0] = parts[0].move(dir)
 
+                // Then move the other parts
                 (1 until parts.size).forEach { tailIndex ->
-                    val headIndex = tailIndex - 1
-                    val head = parts[headIndex]
-                    val tail = parts[tailIndex]
-                    val dx = head.x - tail.x
-                    val dirX = if (dx != 0) dx / abs(dx) else 0
-                    val dy = head.y - tail.y
-                    val dirY = if (dy != 0) dy / abs(dy) else 0
-                    var newTail = tail
-                    if (abs(dx) == 2) {
-                        val x = tail.x + dirX
-                        val y = tail.y + if (dy != 0) dirY else 0
-                        newTail = Point(x, y)
-                    }
-                    if (abs(dy) == 2) {
-                        val x = tail.x + if (dx != 0) dirX else 0
-                        val y = tail.y + dirY
-                        newTail = Point(x, y)
-                    }
-                    parts[tailIndex] = newTail
-                    if (tailIndex == parts.size - 1) {
-                        tailTouches.addAll(listOf(tail, newTail))
-                    }
+                    parts[tailIndex] = parts[tailIndex].moveTowards(parts[tailIndex - 1])
                 }
-                println("${move++} - $dir ${it+1}/$count")
-                printParts()
+
+                tailTouches.add(parts.last())
+
+                parts.print("$move - $dir ${rep + 1}/$count")
             }
         }
-        println(parts)
-        printTailTouches()
+        tailTouches.print()
         return tailTouches.size
     }
+}
 
-    private fun printTailTouches() {
-        val maxX = 25
-        val maxY = 20
-        val xOffset = 11
-        val yOffset = 5
-        val coordinates = (0..maxY).map { (0..maxX).map { "." }.toMutableList() }.toMutableList()
+private fun Set<Point>.print() {
+    if (!print) return
+    CoordinateSystem().also {
+        this.draw(it)
+        println(it)
+    }
+}
+
+private fun List<Point>.print(title: String = "") {
+    if (!print) return
+    CoordinateSystem().also {
+        this.draw(it)
+        println("\n$title")
+        println(it)
+    }
+}
+
+class CoordinateSystem(
+    private val maxX: Int = 25,
+    private val maxY: Int = 20,
+    private val xOffset: Int = 11,
+    private val yOffset: Int = 5,
+    private val coordinates: MutableList<MutableList<String>> = (0..maxY)
+        .map { (0..maxX).map { "." }.toMutableList() }
+        .toMutableList()
+) {
+
+    init {
         coordinates[yOffset][xOffset] = "s"
-        tailTouches.forEach { (x, y) -> coordinates[yOffset + y][xOffset + x] = "#" }
-        coordinates.reversed().forEach { println(it.joinToString("")) }
     }
 
-    private fun printParts() {
-        val maxX = 25
-        val maxY = 20
-        val xOffset = 11
-        val yOffset = 5
-        val coordinates = (0..maxY).map { (0..maxX).map { "." }.toMutableList() }.toMutableList()
-        coordinates[yOffset][xOffset] = "s"
-        parts.reversed().forEachIndexed() { i, (x, y) ->
-            val o = (parts.size - i).let { if (it == 1) "H" else "${it - 1}" }
-            coordinates[yOffset + y][xOffset + x] = o
-        }
-        coordinates.reversed().forEach { println(it.joinToString("")) }
-        println("\n")
+    fun set(x: Int, y: Int, value: String) {
+        coordinates[yOffset + y][xOffset + x] = value
+    }
+
+    override fun toString(): String = coordinates.reversed().joinToString("\n") { it.joinToString("") }
+}
+
+private fun Set<Point>.draw(coordinates: CoordinateSystem) {
+    forEach { (x, y) -> coordinates.set(x, y, "#") }
+}
+
+private fun List<Point>.draw(coordinates: CoordinateSystem) {
+    this.reversed().forEachIndexed() { i, (x, y) ->
+        val o = (this.size - i).let { if (it == 1) "H" else "${it - 1}" }
+        coordinates.set(x, y, o)
     }
 }

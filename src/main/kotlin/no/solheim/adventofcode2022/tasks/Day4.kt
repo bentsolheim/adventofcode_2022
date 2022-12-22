@@ -1,7 +1,5 @@
 package no.solheim.adventofcode2022.tasks
 
-import nonBlankLines
-
 class Day4(input: String) {
 
     val ranges = input.nonBlankLines().map {

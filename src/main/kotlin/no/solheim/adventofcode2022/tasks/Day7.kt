@@ -1,7 +1,5 @@
 package no.solheim.adventofcode2022.tasks
 
-import nonBlankLines
-
 class Day7(val input: String) {
 
     val dirsPart1: Int get() = getDirSizes().values.filter { it <= 100_000 }.sum()

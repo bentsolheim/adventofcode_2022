@@ -29,15 +29,15 @@ U 20
 
     @Test
     fun example() {
-        // assertThat(Day9(example, 2).getTailTouchCount()).isEqualTo(13)
-        // Day9(example, 10).getTailTouchCount()
-        println(Day9(example2, 10).getTailTouchCount())
+        assertThat(Day9(example, 2).getTailTouchCount()).isEqualTo(13)
+        assertThat(Day9(example2, 10).getTailTouchCount()).isEqualTo(36)
     }
 
     @Test
     fun input() {
-        val message = Day9(input).getTailTouchCount()
-        println(message)
-        assertThat(message).isEqualTo(6354)
+        // println(Day9(input, 2).getTailTouchCount())
+        // println(Day9(input, 10).getTailTouchCount())
+        assertThat(Day9(input, 2).getTailTouchCount()).isEqualTo(6354)
+        assertThat(Day9(input, 10).getTailTouchCount()).isEqualTo(2651)
     }
 }

@@ -1,7 +1,5 @@
 package no.solheim.adventofcode2022.tasks
 
-import nonBlankLines
-
 class Day10(val input: String) {
 
     private var registry = 1

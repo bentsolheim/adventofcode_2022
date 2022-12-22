@@ -1,7 +1,5 @@
 package no.solheim.adventofcode2022.tasks
 
-import nonBlankLines
-
 class Day3(val input: String) {
 
     private val priorities = ('a'..'z').map { it } + ('A'..'Z').map { it }

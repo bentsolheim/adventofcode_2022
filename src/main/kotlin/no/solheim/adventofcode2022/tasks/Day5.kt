@@ -1,7 +1,5 @@
 package no.solheim.adventofcode2022.tasks
 
-import nonBlankLines
-
 class Day5(val input: String) {
 
     val cratesTxt: String

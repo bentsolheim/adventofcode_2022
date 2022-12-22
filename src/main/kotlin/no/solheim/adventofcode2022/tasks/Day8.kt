@@ -1,7 +1,5 @@
 package no.solheim.adventofcode2022.tasks
 
-import nonBlankLines
-
 class Day8(val input: String) {
 
     fun getVisibleTreeCount(): Int {
